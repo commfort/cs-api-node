@@ -6,7 +6,7 @@ exports.members = function(api, next){
 
     // methods
 
-    /* 
+    /*
     * Returns all members from from pg
     *
     * Returns a collection of member records
@@ -22,7 +22,7 @@ exports.members = function(api, next){
       })
     },
 
-    /* 
+    /*
     * Returns a specific member from pg by membername
     *
     * membername - the name of the member to fetch
@@ -40,6 +40,18 @@ exports.members = function(api, next){
           next(rs['rows']);
         })
       })
+    },
+
+    /*
+    * Returns a specific member's challenges from apex by membername
+    *
+    * membername - the name of the member to fetch
+    */
+    challenges: function(membername, next) {
+      api.sfdc.org.apexRest({ uri: 'v1/members/' + membername + '/challenges' }, api.sfdc.oauth, function(err, res) {
+        if (err) { console.error(err); }
+        next(res);
+      });
     }
 
   }

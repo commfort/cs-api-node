@@ -1,6 +1,6 @@
 var forcifier = require("forcifier")
   , utils = require("../utils")
-  , _ = require("underscore")  
+  , _ = require("underscore")
 
 exports.membersList = {
   name: "membersList",
@@ -34,6 +34,24 @@ exports.membersFetch = {
     // enforce the pass list of field or if null, use the default member list of fields
     var fields =  connection.params.fields != null ? forcifier.enforceList(connection.params.fields) : api.configData.defaults.memberFields;
     api.members.fetch(connection.params.membername, fields, function(data){
+      utils.processResponse(data, connection);
+      next(connection, true);
+    });
+  }
+};
+
+exports.membersChallenges = {
+  name: "membersChallenges",
+  description: "Fetches a specific member's challenges. Method: GET",
+  inputs: {
+    required: ['membername'],
+    optional: [],
+  },
+  authenticated: false,
+  outputExample: { { "0" : { "id": "2885", "name": "Port the CloudSpokes API to Node.js", "challenge_type" : "Code", "top_prize": "100" } },
+  version: 2.0,
+  run: function(api, connection, next){
+    api.members.challenges(connection.params.membername, function(data){
       utils.processResponse(data, connection);
       next(connection, true);
     });
